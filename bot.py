@@ -31,7 +31,7 @@ print(f"Token type: {type(DISCORD_BOT_TOKEN)}")
 print(f"Token length: {len(DISCORD_BOT_TOKEN) if DISCORD_BOT_TOKEN else 'None'}")
 print(f"Token first 10 chars: {DISCORD_BOT_TOKEN[:10] if DISCORD_BOT_TOKEN else 'None'}")
 
-class VortexBot(commands.Bot):
+class VortexBot(commands.AutoShardedBot):
     def __init__(self):
         intents = discord.Intents.default()
         intents.members = True
@@ -43,7 +43,8 @@ class VortexBot(commands.Bot):
         super().__init__(
             command_prefix='!',
             intents=intents,
-            help_command=commands.DefaultHelpCommand()
+            help_command=commands.DefaultHelpCommand(),
+            shard_count=2  # Adjust based on your needs
         )
         
         # Initialize core systems
@@ -96,10 +97,6 @@ class VortexBot(commands.Bot):
         # Airdrop System
         self.scheduled_airdrops = []
         self.airdrop_participants = set()
-        
-        # Payment System
-        self.pending_payments = {}
-        self.payment_history = {}
 
     async def setup_hook(self):
         """Load all cogs when bot starts"""
